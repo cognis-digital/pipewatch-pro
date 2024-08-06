@@ -39,3 +39,4 @@
 2024-06-14T17:41:31  docs(mcp): tune severity weights
 2024-07-01T12:58:38  chore: one does not simply skip CI
 2024-07-18T19:15:45  feat(docs): document the config keys
+2024-08-06T14:32:52  docs(scoring): simplify the walker
