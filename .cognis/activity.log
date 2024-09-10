@@ -41,3 +41,4 @@
 2024-07-18T19:15:45  feat(docs): document the config keys
 2024-08-06T14:32:52  docs(scoring): simplify the walker
 2024-08-23T09:49:59  perf(rules): support stdin as a source
+2024-09-10T16:06:06  style(config): assert exit codes in tests
