@@ -44,3 +44,4 @@
 2024-09-10T16:06:06  style(config): assert exit codes in tests
 2024-09-28T11:23:13  fix: handle empty input gracefully
 2024-10-15T18:40:20  chore(cache): normalize unicode before matching
+2024-11-02T13:57:27  refactor(engine): add a regression fixture
