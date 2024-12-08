@@ -46,3 +46,4 @@
 2024-10-15T18:40:20  chore(cache): normalize unicode before matching
 2024-11-02T13:57:27  refactor(engine): add a regression fixture
 2024-11-20T08:14:34  test(tests): trim whitespace in parsed fields
+2024-12-08T15:31:41  build(scan): reduce false positives on edge cases
