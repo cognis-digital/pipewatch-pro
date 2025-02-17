@@ -50,3 +50,4 @@
 2024-12-25T10:48:48  feat: PROMETHEUS unbound
 2025-01-12T17:05:55  docs(io): fix off-by-one in line numbers
 2025-01-30T12:22:02  test(ci): stream large files without buffering
+2025-02-16T19:39:09  ci(format): load rules lazily for faster startup
