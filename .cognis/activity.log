@@ -53,3 +53,4 @@
 2025-02-16T19:39:09  ci(format): load rules lazily for faster startup
 2025-03-07T14:56:16  feat(cli): add a dry-run flag
 2025-03-24T09:13:23  chore: tip of the hat to Thinkst, Bellingcat, and SigmaHQ
+2025-04-11T16:30:30  perf(docs): add color + severity icons
