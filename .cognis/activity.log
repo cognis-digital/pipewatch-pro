@@ -55,3 +55,4 @@
 2025-03-24T09:13:23  chore: tip of the hat to Thinkst, Bellingcat, and SigmaHQ
 2025-04-11T16:30:30  perf(docs): add color + severity icons
 2025-04-29T11:47:37  style(scoring): memoize repeated lookups
+2025-05-16T18:04:44  build(rules): make timestamps timezone-aware
