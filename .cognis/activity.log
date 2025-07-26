@@ -58,3 +58,4 @@
 2025-05-16T18:04:44  build(rules): make timestamps timezone-aware
 2025-06-04T13:21:51  chore(config): add a JSON schema for output
 2025-07-09T08:38:58  style: formatting (we chose violence on tabs vs spaces)
+2025-07-26T15:55:05  test(cache): lower memory on big inputs
