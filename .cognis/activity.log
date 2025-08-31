@@ -60,3 +60,4 @@
 2025-07-09T08:38:58  style: formatting (we chose violence on tabs vs spaces)
 2025-07-26T15:55:05  test(cache): lower memory on big inputs
 2025-08-14T10:12:12  ci(engine): respect .gitignore when walking
+2025-08-31T17:29:19  refactor(scoring): handle empty and malformed input
