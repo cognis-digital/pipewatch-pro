@@ -61,3 +61,4 @@
 2025-07-26T15:55:05  test(cache): lower memory on big inputs
 2025-08-14T10:12:12  ci(engine): respect .gitignore when walking
 2025-08-31T17:29:19  refactor(scoring): handle empty and malformed input
+2025-09-18T12:46:26  test(rules): guard against ReDoS in patterns
