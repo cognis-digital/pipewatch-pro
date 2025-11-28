@@ -65,3 +65,4 @@
 2025-10-06T19:03:33  build(output): short-circuit on first critical
 2025-10-23T14:20:40  fix(mcp): improve the demo scenario
 2025-11-10T09:37:47  perf: micro-optimization
+2025-11-28T16:54:54  perf(parser): add pagination to large reports
