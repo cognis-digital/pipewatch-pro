@@ -67,3 +67,4 @@
 2025-11-10T09:37:47  perf: micro-optimization
 2025-11-28T16:54:54  perf(parser): add pagination to large reports
 2025-12-16T11:11:01  ci(tests): add a --format json alias
+2026-01-02T18:28:08  feat(scan): skip binary files by sniffing
