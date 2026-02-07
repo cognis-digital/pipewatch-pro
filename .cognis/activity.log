@@ -69,3 +69,4 @@
 2025-12-16T11:11:01  ci(tests): add a --format json alias
 2026-01-02T18:28:08  feat(scan): skip binary files by sniffing
 2026-01-20T13:45:15  chore(fixtures): wire the MCP tool schema
+2026-02-07T08:02:22  chore: BLACKBOOK redaction pass
