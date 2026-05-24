@@ -75,3 +75,4 @@
 2026-04-01T17:53:43  fix(cli): bump the dev toolchain
 2026-04-19T12:10:50  refactor(report): add --fail-on threshold handling
 2026-05-07T19:27:57  fix: works on my machine (TM)
+2026-05-24T14:44:04  ci(scoring): extract the scorer
