@@ -1,57 +1,116 @@
-# PIPEWATCH-PRO — CI/CD supply-chain auditor — GH Actions / GitLab CI / OWASP CI/CD Top 10
+<a name="top"></a>
+<div align="center">
 
-> Part of the **[Cognis Neural Suite](https://github.com/cognis-digital)** by [Cognis Digital](https://cognis.digital)
-> Cognis Open Collaboration License (COCL) v1.0 · domain: `dev-supply-chain`
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:6b46c1,100:2b6cb0&height=120&section=header&text=PIPEWATCH-PRO&fontSize=48&fontColor=ffffff&fontAlignY=58" width="100%" alt="PIPEWATCH-PRO"/>
 
-[![PyPI](https://img.shields.io/pypi/v/cognis-pipewatch-pro.svg)](https://pypi.org/project/cognis-pipewatch-pro/)
-[![CI](https://github.com/cognis-digital/pipewatch-pro/actions/workflows/ci.yml/badge.svg)](https://github.com/cognis-digital/pipewatch-pro/actions)
-[![License: COCL 1.0](https://img.shields.io/badge/License-COCL%201.0-2b6cb0.svg)](LICENSE)
+# PIPEWATCH-PRO
 
-CI/CD supply-chain auditor — GH Actions / GitLab CI / OWASP CI/CD Top 10.
+### CI/CD supply-chain auditor — GH Actions / GitLab CI / OWASP CI/CD Top 10
 
-## Install
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&duration=3500&pause=1000&color=6B46C1&center=true&vCenter=true&width=720&lines=CICD+supplychain+auditor++GH+Actions++GitLab+CI++OWASP+CICD+;Self-hostable+%C2%B7+MCP-native+%C2%B7+CI-ready+%C2%B7+polyglot" width="720"/>
+
+[![PyPI](https://img.shields.io/pypi/v/cognis-pipewatch-pro.svg?color=6b46c1)](https://pypi.org/project/cognis-pipewatch-pro/) [![CI](https://github.com/cognis-digital/pipewatch-pro/actions/workflows/ci.yml/badge.svg)](https://github.com/cognis-digital/pipewatch-pro/actions) [![License: COCL 1.0](https://img.shields.io/badge/License-COCL%201.0-2b6cb0.svg)](LICENSE) [![Suite](https://img.shields.io/badge/Cognis-Neural%20Suite-6b46c1.svg)](https://github.com/cognis-digital)
+
+*Developer / Supply Chain — secrets, SBOM, CI/CD, and license hygiene.*
+
+</div>
 
 ```bash
 pip install cognis-pipewatch-pro
+pipewatch-pro scan .            # → prioritized findings in seconds
 ```
 
-For local development from this repo:
+## Contents
 
-```bash
-pip install -e .
-```
+- [Why pipewatch-pro?](#why) · [Features](#features) · [Quick start](#quick-start) · [Example](#example) · [How it compares](#how-it-compares) · [Integrations](#integrations) · [Install anywhere](#install-anywhere) · [Contributing](#contributing)
 
+<a name="why"></a>
+## Why pipewatch-pro?
+
+CI/CD supply-chain auditor — GH Actions / GitLab CI / OWASP CI/CD Top 10 — without standing up heavyweight infrastructure.
+
+`pipewatch-pro` is single-purpose, scriptable, and self-hostable: point it at a target, get prioritized results in the format your workflow already speaks (table · JSON · SARIF), gate CI on it, and let agents drive it over MCP.
+
+<div align="right"><a href="#top">↑ back to top</a></div>
+
+<a name="features"></a>
+## Features
+
+- ✅ Scan
+- ✅ Runs on Linux/macOS/Windows · Docker · devcontainer
+- ✅ Ports in Python, JavaScript, Go, and Rust (`ports/`)
+
+<div align="right"><a href="#top">↑ back to top</a></div>
+
+<a name="quick-start"></a>
 ## Quick start
 
 ```bash
+pip install cognis-pipewatch-pro
 pipewatch-pro --version
-pipewatch-pro scan demos/                          # run against bundled demo
-pipewatch-pro scan demos/ --format sarif --out r.sarif --fail-on high
-pipewatch-pro mcp                                   # start as MCP server (Cognis.Studio / Claude Desktop / Cursor)
+pipewatch-pro scan .                       # scan current project
+pipewatch-pro scan . --format json         # machine-readable
+pipewatch-pro scan . --fail-on high        # CI gate (non-zero exit)
 ```
 
-## Built-in demo scenarios
+<div align="right"><a href="#top">↑ back to top</a></div>
 
-Every scenario folder includes a `SCENARIO.md` describing what it represents and what findings to expect.
+<a name="example"></a>
+## Example
 
-- `demos/01-vulnerable-actions/` — see [`SCENARIO.md`](demos/01-vulnerable-actions/SCENARIO.md)
-- `demos/02-hardened-workflow/` — see [`SCENARIO.md`](demos/02-hardened-workflow/SCENARIO.md)
-- `demos/03-mixed-fleet/` — see [`SCENARIO.md`](demos/03-mixed-fleet/SCENARIO.md)
+```text
+$ pipewatch-pro scan .
+  [HIGH    ] PIP-001  example finding             (./src/app.py)
+  [MEDIUM  ] PIP-002  another signal              (./config.yaml)
 
-## How it fits the Cognis Neural Suite
+  2 findings · risk score 5 · 38ms
+```
 
-This tool is one of 52 in the [Cognis Neural Suite](https://github.com/cognis-digital). The full suite + launcher lives at:
+<div align="right"><a href="#top">↑ back to top</a></div>
 
-- Suite landing: https://cognis.digital
-- All 52 repos: https://github.com/cognis-digital
-- Cognis.Studio (Enterprise AI Workforce, MCP host): https://cognis.studio
+<a name="how-it-compares"></a>
+## How it compares
 
-Every Suite tool ships an MCP server, so Cognis.Studio agents can call them as scoped capabilities.
+| | **Cognis pipewatch-pro** | step-security |
+|---|:---:|:---:|
+| Self-hostable, no account | ✅ | varies |
+| Single command, zero config | ✅ | ⚠️ |
+| JSON + SARIF for CI | ✅ | varies |
+| MCP-native (AI agents) | ✅ | ❌ |
+| Polyglot ports (JS/Go/Rust) | ✅ | ❌ |
+| Open license | ✅ COCL | varies |
+
+*Built in the spirit of **step-security/secure-workflows**, re-framed the Cognis way. Missing a credit? Open a PR.*
+
+<div align="right"><a href="#top">↑ back to top</a></div>
+
+<a name="integrations"></a>
+## Integrations
+
+Pipes into your stack: **SARIF** for code-scanning, **JSON** for anything, an **MCP server** (`pipewatch-pro mcp`) for AI agents, and a webhook forwarder for SIEM/Slack/Jira. See [`docs/INTEGRATIONS.md`](docs/INTEGRATIONS.md).
+
+<div align="right"><a href="#top">↑ back to top</a></div>
+
+<a name="install-anywhere"></a>
+## Install anywhere
+
+| Linux | macOS | Windows | Docker | Cloud |
+|---|---|---|---|---|
+| `scripts/setup-linux.sh` | `scripts/setup-macos.sh` | `scripts/setup-windows.ps1` | `docker run ghcr.io/cognis-digital/pipewatch-pro` | [DEPLOY.md](docs/DEPLOY.md) (AWS/Azure/GCP/k8s) |
+
+<div align="right"><a href="#top">↑ back to top</a></div>
+
+<a name="contributing"></a>
+## Contributing
+
+PRs, new rules, and demo scenarios are welcome under the collaboration-pull model — see [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
+
+> ### ⭐ If `pipewatch-pro` saved you time, **star it** — it genuinely helps others find it.
 
 ## License
 
-Source-available under the **Cognis Open Collaboration License (COCL) v1.0** — free for personal, internal-evaluation, research, and educational use; **commercial / production use requires a license** (licensing@cognis.digital). See [LICENSE](LICENSE) and [CONTRIBUTING.md](CONTRIBUTING.md) for the collaboration-pull model.
+Source-available under the **Cognis Open Collaboration License (COCL) v1.0** — free for personal, internal-evaluation, research, and educational use; **commercial / production use requires a license** (licensing@cognis.digital). See [LICENSE](LICENSE).
 
-## About
+---
 
-**[Cognis Digital](https://cognis.digital)** — Wyoming, USA · *Making Tomorrow Better Today: Advanced Cybersecurity, AI Innovation, and Blockchain Expertise.*
+<div align="center"><sub><b><a href="https://cognis.digital">Cognis Digital</a></b> · one of 170+ tools in the <a href="https://github.com/cognis-digital/cognis-neural-suite">Cognis Neural Suite</a> · <i>Making Tomorrow Better Today</i></sub></div>
