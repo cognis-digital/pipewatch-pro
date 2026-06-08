@@ -36,7 +36,11 @@ CI/CD supply-chain auditor — GH Actions / GitLab CI / OWASP CI/CD Top 10 — w
 <a name="features"></a>
 ## Features
 
-- ✅ Scan
+- ✅ Discover Pipeline Files
+- ✅ Audit Text
+- ✅ Audit File
+- ✅ Audit Paths
+- ✅ Summarize
 - ✅ Runs on Linux/macOS/Windows · Docker · devcontainer
 - ✅ Ports in Python, JavaScript, Go, and Rust (`ports/`)
 
