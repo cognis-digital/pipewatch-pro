@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: pipewatch-pro, labels: { app: pipewatch-pro } }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: pipewatch-pro } }
+  template:
+    metadata: { labels: { app: pipewatch-pro } }
+    spec:
+      containers:
+        - name: pipewatch-pro
+          image: ghcr.io/cognis-digital/pipewatch-pro:latest
+          ports: [{ containerPort: 8000 }]
+          resources:
+            requests: { cpu: "50m", memory: "64Mi" }
+            limits: { cpu: "500m", memory: "256Mi" }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: pipewatch-pro }
+spec:
+  selector: { app: pipewatch-pro }
+  ports: [{ port: 80, targetPort: 8000 }]
