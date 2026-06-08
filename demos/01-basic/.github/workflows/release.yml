@@ -1,0 +1,19 @@
+name: release
+on:
+  pull_request_target:
+    branches: [main]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65  # v4.0.0
+      - name: Install toolchain
+        run: curl -sSL https://example.dev/install.sh | sudo bash
+      - name: Deploy
+        run: ./deploy.sh
+        env:
+          AWS_SECRET_ACCESS_KEY: wJalrXUtnFEMIK7MDENGbPxRfiCYEXAMPLEKEY1
+      - name: Notify
+        run: echo "publishing as ${{ secrets.NPM_TOKEN }}"
