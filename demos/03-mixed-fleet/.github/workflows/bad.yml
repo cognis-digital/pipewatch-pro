@@ -1,0 +1,6 @@
+on: push
+jobs:
+  t:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: some/action@v1
