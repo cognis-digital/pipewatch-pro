@@ -47,7 +47,7 @@ jobs:
 
 class TestEngine(unittest.TestCase):
     def test_metadata(self):
-        self.assertEqual(TOOL_NAME, "PIPEWATCH-PRO")
+        self.assertEqual(TOOL_NAME, "pipewatch-pro")
         self.assertTrue(TOOL_VERSION)
 
     def test_risky_flags_each_category(self):

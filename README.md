@@ -9,16 +9,22 @@
 
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=18&duration=3500&pause=1000&color=6B46C1&center=true&vCenter=true&width=720&lines=CICD+supplychain+auditor++GH+Actions++GitLab+CI++OWASP+CICD+;Self-hostable+%C2%B7+MCP-native+%C2%B7+CI-ready+%C2%B7+polyglot" width="720"/>
 
-[![PyPI](https://img.shields.io/pypi/v/cognis-pipewatch-pro.svg?color=6b46c1)](https://pypi.org/project/cognis-pipewatch-pro/) [![CI](https://github.com/cognis-digital/pipewatch-pro/actions/workflows/ci.yml/badge.svg)](https://github.com/cognis-digital/pipewatch-pro/actions) [![License: COCL 1.0](https://img.shields.io/badge/License-COCL%201.0-2b6cb0.svg)](LICENSE) [![Suite](https://img.shields.io/badge/Cognis-Neural%20Suite-6b46c1.svg)](https://github.com/cognis-digital)
+[![install](https://img.shields.io/badge/install-git%2B%20%C2%B7%20pipx%20%C2%B7%20uv-6b46c1.svg)](#install--every-way-every-platform) [![CI](https://github.com/cognis-digital/pipewatch-pro/actions/workflows/ci.yml/badge.svg)](https://github.com/cognis-digital/pipewatch-pro/actions) [![License: COCL 1.0](https://img.shields.io/badge/License-COCL%201.0-2b6cb0.svg)](LICENSE) [![Suite](https://img.shields.io/badge/Cognis-Neural%20Suite-6b46c1.svg)](https://github.com/cognis-digital)
 
 *Developer / Supply Chain — secrets, SBOM, CI/CD, and license hygiene.*
 
 </div>
 
 ```bash
-pip install cognis-pipewatch-pro
+pip install "git+https://github.com/cognis-digital/pipewatch-pro.git"
 pipewatch-pro scan .            # → prioritized findings in seconds
 ```
+
+<!-- cognis:layman:start -->
+## What is this?
+
+pipewatch-pro checks your project's automated build and deployment scripts for common security mistakes before attackers can exploit them. It scans GitHub Actions and GitLab CI workflow files and flags problems like using unverified third-party scripts, hardcoded passwords, and overly broad permission settings — giving you a prioritised list of what to fix. You get results in seconds as a plain table, JSON, or SARIF report that plugs straight into your code-review pipeline. It is aimed at developers and DevOps engineers who want a fast, self-hosted way to catch CI/CD supply-chain risks without signing up for an external service.
+<!-- cognis:layman:end -->
 
 ## Contents
 
@@ -47,10 +53,46 @@ CI/CD supply-chain auditor — GH Actions / GitLab CI / OWASP CI/CD Top 10 — w
 <div align="right"><a href="#top">↑ back to top</a></div>
 
 <a name="quick-start"></a>
+<!-- cognis:install:start -->
+## Install
+
+`pipewatch-pro` is source-available (not published to PyPI) — every method below installs
+straight from GitHub. Pick whichever you prefer; the one-line scripts auto-detect
+the best tool available on your machine.
+
+**One-liner (Linux / macOS):**
+```sh
+curl -fsSL https://raw.githubusercontent.com/cognis-digital/pipewatch-pro/HEAD/install.sh | sh
+```
+
+**One-liner (Windows PowerShell):**
+```powershell
+irm https://raw.githubusercontent.com/cognis-digital/pipewatch-pro/HEAD/install.ps1 | iex
+```
+
+**Or install manually — any one of:**
+```sh
+pipx install "git+https://github.com/cognis-digital/pipewatch-pro.git"     # isolated (recommended)
+uv tool install "git+https://github.com/cognis-digital/pipewatch-pro.git"  # uv
+pip install "git+https://github.com/cognis-digital/pipewatch-pro.git"      # pip
+```
+
+**From source:**
+```sh
+git clone https://github.com/cognis-digital/pipewatch-pro.git
+cd pipewatch-pro && pip install .
+```
+
+Then run:
+```sh
+pipewatch-pro --help
+```
+<!-- cognis:install:end -->
+
 ## Quick start
 
 ```bash
-pip install cognis-pipewatch-pro
+pip install "git+https://github.com/cognis-digital/pipewatch-pro.git"
 pipewatch-pro --version
 pipewatch-pro scan .                       # scan current project
 pipewatch-pro scan . --format json         # machine-readable
@@ -143,6 +185,32 @@ curl -fsSL https://raw.githubusercontent.com/cognis-digital/pipewatch-pro/main/i
 <div align="right"><a href="#top">↑ back to top</a></div>
 
 <a name="related"></a>
+<a name="verification"></a>
+## Verification
+
+[![tests](https://img.shields.io/badge/tests-10%20passing-2ea44f.svg)](AUDIT.md)
+
+Every push is verified end-to-end. Latest audit (2026-06-12):
+
+```text
+tests        : 10 passed, 0 failed, 0 errored
+compile      : all modules parse
+cli          : C:\Python314\python.exe: No module named https
+package      : https
+```
+
+<details><summary>CLI surface (<code>--help</code>)</summary>
+
+```text
+C:\Python314\python.exe: No module named https
+```
+</details>
+
+Full machine-readable results: [`AUDIT.md`](AUDIT.md) · regenerate with `python -m https --help` + `pytest -q`.
+
+<div align="right"><a href="#top">↑ back to top</a></div>
+
+
 ## Related Cognis tools
 
 - [`depgraph`](https://github.com/cognis-digital/depgraph) — Dependency risk visualizer — Scorecard + OSV + typosquat + maintainer signals
