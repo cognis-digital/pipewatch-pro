@@ -20,6 +20,31 @@ pip install cognis-pipewatch-pro
 pipewatch-pro scan .            # → prioritized findings in seconds
 ```
 
+## Usage — step by step
+
+`pipewatch-pro` audits CI/CD pipeline files against the OWASP CI/CD Top 10. Console script: `pipewatch-pro`.
+
+1. **Install**:
+   ```bash
+   pipx install pipewatch-pro     # or: pip install pipewatch-pro
+   ```
+2. **Audit pipeline files or whole repos** (GitHub Actions / GitLab CI, etc.):
+   ```bash
+   pipewatch-pro audit .github/workflows/ .gitlab-ci.yml
+   ```
+3. **Read the findings as JSON** for dashboards or piping:
+   ```bash
+   pipewatch-pro audit . --format json | jq '.summary'
+   ```
+4. **Tune the failure gate** — the build fails when a finding at/above `--fail-on` exists (default: `high`); `never` always exits `0`:
+   ```bash
+   pipewatch-pro audit . --fail-on critical
+   ```
+5. **Wire it into the pipeline itself** so insecure changes block the merge:
+   ```bash
+   pipewatch-pro audit . --fail-on high || echo "OWASP CI/CD finding — blocking pipeline"
+   ```
+
 ## Contents
 
 - [Why pipewatch-pro?](#why) · [Features](#features) · [Quick start](#quick-start) · [Example](#example) · [Architecture](#architecture) · [AI stack](#ai-stack) · [How it compares](#how-it-compares) · [Integrations](#integrations) · [Install anywhere](#install-anywhere) · [Related](#related) · [Contributing](#contributing)
