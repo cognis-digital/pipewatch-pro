@@ -36,3 +36,6 @@ pipewatch-pro = "pipewatch_pro.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["pipewatch_pro"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
