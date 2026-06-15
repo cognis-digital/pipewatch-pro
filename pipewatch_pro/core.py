@@ -70,8 +70,10 @@ def _is_pipeline_file(path: str) -> bool:
 
 def discover_pipeline_files(root: str) -> list[str]:
     """Walk *root* and return every recognised CI pipeline file."""
+    if not root:
+        return []
     if os.path.isfile(root):
-        return [root] if root else []
+        return [root]
     found: list[str] = []
     for dirpath, _dirs, files in os.walk(root):
         for fn in files:
@@ -106,8 +108,8 @@ def audit_text(text: str, path: str) -> list[Finding]:
     findings: list[Finding] = []
     lines = text.splitlines()
     is_gitlab = os.path.basename(path).lower() in _GITLAB_NAMES
-    has_permissions_block = any(_PERMISSIONS.match(l) for l in lines)
-    has_trigger = any(_TRIGGER.match(_strip_comment(l)) for l in lines)
+    has_permissions_block = any(_PERMISSIONS.match(ln) for ln in lines)
+    has_trigger = any(_TRIGGER.match(_strip_comment(ln)) for ln in lines)
     pull_request_target = False
 
     for idx, raw in enumerate(lines, start=1):
@@ -159,13 +161,17 @@ def audit_text(text: str, path: str) -> list[Finding]:
         if hm and "${{" not in line and "$(" not in line and "secrets." not in line:
             val = hm.group(2)
             # Avoid flagging obvious placeholders.
-            if not re.fullmatch(r"(x{8,}|changeme|placeholder|example.*|<.*>)", val, re.IGNORECASE):
+            if not re.fullmatch(
+                r"(x{8,}|changeme|placeholder|example.*|<.*>)", val, re.IGNORECASE
+            ):
                 findings.append(Finding(
                     rule_id="CICD-SEC-06",
                     title="Hard-coded credential in pipeline",
                     severity="critical",
                     file=path, line=idx,
-                    evidence=re.sub(re.escape(val), val[:4] + "…(redacted)", line.strip())[:160],
+                    evidence=re.sub(
+                        re.escape(val), val[:4] + "…(redacted)", line.strip()
+                    )[:160],
                     remediation=(
                         "Move the secret to the platform secret store "
                         "(GitHub/GitLab secrets) and reference it at runtime."),
@@ -225,16 +231,25 @@ def audit_text(text: str, path: str) -> list[Finding]:
 
 
 def audit_file(path: str) -> list[Finding]:
+    """Read *path* and run all detectors; raises OSError on permission/IO errors."""
     with open(path, "r", encoding="utf-8", errors="replace") as fh:
         text = fh.read()
     return audit_text(text, path)
 
 
 def audit_paths(paths: Iterable[str]) -> list[Finding]:
-    """Audit each path; directories are walked for pipeline files."""
+    """Audit each path; directories are walked for pipeline files.
+
+    Raises:
+        FileNotFoundError: when a given path does not exist.
+        PermissionError: when a file cannot be read.
+        OSError: for other I/O failures on individual files.
+    """
     all_findings: list[Finding] = []
     targets: list[str] = []
     for p in paths:
+        if not p:
+            continue
         if os.path.isdir(p):
             targets.extend(discover_pipeline_files(p))
         elif os.path.isfile(p):
@@ -243,7 +258,9 @@ def audit_paths(paths: Iterable[str]) -> list[Finding]:
             raise FileNotFoundError(p)
     for t in targets:
         all_findings.extend(audit_file(t))
-    all_findings.sort(key=lambda f: (SEVERITY_ORDER.get(f.severity, 9), f.file, f.line))
+    all_findings.sort(
+        key=lambda f: (SEVERITY_ORDER.get(f.severity, 9), f.file, f.line)
+    )
     return all_findings
 
 
