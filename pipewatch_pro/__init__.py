@@ -1,11 +1,27 @@
-"""pipewatch-pro — part of the Cognis Neural Suite."""
-try:  # re-export the tool's public API + identity from core
-    from pipewatch_pro.core import *  # noqa: F401,F403
-except Exception:  # pragma: no cover
-    pass
-try:
-    from pipewatch_pro.core import TOOL_NAME, TOOL_VERSION
-except Exception:  # pragma: no cover
-    TOOL_NAME = "pipewatch-pro"
-    TOOL_VERSION = "0.1.0"
+"""pipewatch-pro — part of the Cognis Neural Suite.
+
+CI/CD supply-chain auditor (GitHub Actions / GitLab CI) mapped to the OWASP
+CI/CD Top 10, with offline OSV vulnerability enrichment. Stdlib-only core.
+"""
+from pipewatch_pro.core import (  # noqa: F401
+    TOOL_NAME,
+    TOOL_VERSION,
+    Finding,
+    Component,
+    audit_text,
+    audit_file,
+    audit_paths,
+    discover_pipeline_files,
+    extract_components,
+    summarize,
+    scan,
+    to_sarif,
+    SEVERITY_ORDER,
+)
+
 __version__ = TOOL_VERSION
+__all__ = [
+    "TOOL_NAME", "TOOL_VERSION", "Finding", "Component",
+    "audit_text", "audit_file", "audit_paths", "discover_pipeline_files",
+    "extract_components", "summarize", "scan", "to_sarif", "SEVERITY_ORDER",
+]

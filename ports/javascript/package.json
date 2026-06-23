@@ -1,9 +1,12 @@
 {
   "name": "@cognis/pipewatch-pro",
-  "version": "0.2.0",
-  "description": "JavaScript port of pipewatch-pro (Cognis Neural Suite)",
+  "version": "0.3.4",
+  "description": "Node.js port of PIPEWATCH-PRO — CI/CD supply-chain auditor (OWASP CI/CD Top 10)",
   "bin": {
     "pipewatch-pro": "index.js"
+  },
+  "scripts": {
+    "test": "node --test"
   },
   "license": "LicenseRef-COCL-1.0",
   "type": "module"

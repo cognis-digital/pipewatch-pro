@@ -13,6 +13,11 @@ from dataclasses import dataclass, asdict
 from typing import Iterable
 
 
+# ---- Tool identity (single source of truth; re-exported by __init__) -------
+TOOL_NAME = "PIPEWATCH-PRO"
+TOOL_VERSION = "0.3.4"
+
+
 # Ordered worst -> least for sorting / exit-code decisions.
 SEVERITY_ORDER = {"critical": 0, "high": 1, "medium": 2, "low": 3, "info": 4}
 
@@ -245,6 +250,132 @@ def audit_paths(paths: Iterable[str]) -> list[Finding]:
         all_findings.extend(audit_file(t))
     all_findings.sort(key=lambda f: (SEVERITY_ORDER.get(f.severity, 9), f.file, f.line))
     return all_findings
+
+
+def scan(paths) -> list[dict]:
+    """Convenience wrapper returning plain dicts (used by the MCP server)."""
+    if isinstance(paths, str):
+        paths = [paths]
+    return [f.to_dict() for f in audit_paths(paths)]
+
+
+# Map our internal severities to SARIF result levels.
+_SARIF_LEVEL = {
+    "critical": "error", "high": "error", "medium": "warning",
+    "low": "note", "info": "note",
+}
+
+
+def to_sarif(findings: list[Finding]) -> dict:
+    """Render findings as a SARIF 2.1.0 log (GitHub code-scanning compatible)."""
+    rule_index: dict[str, int] = {}
+    rules: list[dict] = []
+    results: list[dict] = []
+    for f in findings:
+        if f.rule_id not in rule_index:
+            rule_index[f.rule_id] = len(rules)
+            rules.append({
+                "id": f.rule_id,
+                "name": f.rule_id.replace("-", ""),
+                "shortDescription": {"text": f.title},
+                "helpUri": "https://owasp.org/www-project-top-10-ci-cd-security-risks/",
+                "properties": {"owasp": f.owasp},
+            })
+        results.append({
+            "ruleId": f.rule_id,
+            "ruleIndex": rule_index[f.rule_id],
+            "level": _SARIF_LEVEL.get(f.severity, "warning"),
+            "message": {"text": f"{f.title} — {f.remediation}"},
+            "locations": [{
+                "physicalLocation": {
+                    "artifactLocation": {"uri": f.file.replace("\\", "/")},
+                    "region": {"startLine": max(f.line, 1)},
+                }
+            }],
+            "properties": {"severity": f.severity, "evidence": f.evidence},
+        })
+    return {
+        "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+        "version": "2.1.0",
+        "runs": [{
+            "tool": {"driver": {
+                "name": TOOL_NAME,
+                "version": TOOL_VERSION,
+                "informationUri": "https://github.com/cognis-digital/pipewatch-pro",
+                "rules": rules,
+            }},
+            "results": results,
+        }],
+    }
+
+
+# --- Component extraction (for offline CVE enrichment) ----------------------
+# A Docker image reference inside a workflow:  image: owner/name:tag
+_IMAGE = re.compile(
+    r"^\s*-?\s*image\s*:\s*['\"]?([A-Za-z0-9][\w./-]*?):([\w.\-]+)['\"]?",
+    re.IGNORECASE,
+)
+# `uses: owner/repo@ref` — the action's repo is the component.
+# pip/npm pinned installs inside run: steps,  e.g.  pip install requests==2.5.0
+_PIN_PIP = re.compile(r"\b([A-Za-z0-9][\w.\-]+)==([\w.\-]+)")
+_PIN_NPM = re.compile(r"\b([@A-Za-z0-9][\w./\-]+)@(\d[\w.\-]*)")
+# Bare CVE / GHSA reference anywhere in the text.
+_CVE_REF = re.compile(r"\b(CVE-\d{4}-\d{3,7}|GHSA-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4})\b",
+                      re.IGNORECASE)
+
+
+@dataclass
+class Component:
+    name: str
+    version: str
+    kind: str          # action|image|pip|npm|cve-ref
+    file: str
+    line: int
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+
+def extract_components(text: str, path: str) -> list[Component]:
+    """Pull named software components + CVE refs from a pipeline document.
+
+    Purely textual / offline — feeds the `enrich` subcommand which matches each
+    component name against the bundled OSV vulnerability database.
+    """
+    out: list[Component] = []
+    seen: set[tuple] = set()
+
+    def _add(name: str, version: str, kind: str, line: int) -> None:
+        key = (name.lower(), version, kind)
+        if name and key not in seen:
+            seen.add(key)
+            out.append(Component(name, version, kind, path, line))
+
+    for idx, raw in enumerate(text.splitlines(), start=1):
+        # CVE/GHSA refs are valid even inside comments (advisory annotations) —
+        # scan the raw line first, before the blank/comment skip below.
+        for cm in _CVE_REF.finditer(raw):
+            _add(cm.group(1).upper(), "", "cve-ref", idx)
+        line = _strip_comment(raw)
+        if not line.strip():
+            continue
+        m = _USES.match(line)
+        if m and _looks_like_action_ref(m.group(1).strip()):
+            ref = m.group(1).strip()
+            repo, _, tag = ref.partition("@")
+            _add(repo, tag, "action", idx)
+        im = _IMAGE.match(line)
+        if im:
+            _add(im.group(1), im.group(2), "image", idx)
+        rm = _RUN_KEY.match(line)
+        body = rm.group(1) if rm else line
+        if "install" in body.lower():
+            for pm in _PIN_PIP.finditer(body):
+                _add(pm.group(1), pm.group(2), "pip", idx)
+            if "npm" in body.lower() or "yarn" in body.lower():
+                for nm in _PIN_NPM.finditer(body):
+                    _add(nm.group(1), nm.group(2), "npm", idx)
+    return out
 
 
 def summarize(findings: list[Finding]) -> dict:

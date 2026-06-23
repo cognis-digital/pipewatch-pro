@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cognis-pipewatch-pro"
-version = "0.1.1"
-description = "CI/CD supply-chain auditor — GH Actions / GitLab CI / OWASP CI/CD Top 10"
+version = "0.3.4"
+description = "CI/CD supply-chain auditor — GH Actions / GitLab CI / OWASP CI/CD Top 10 + offline OSV enrichment"
 authors = [{name = "Cognis Digital", email = "suite@cognis.digital"}]
 license = {text = "LicenseRef-COCL-1.0"}
 requires-python = ">=3.10"
@@ -36,6 +36,10 @@ pipewatch-pro = "pipewatch_pro.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["pipewatch_pro"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"pipewatch_pro/cognis_vulndb.jsonl.gz" = "pipewatch_pro/cognis_vulndb.jsonl.gz"
+"pipewatch_pro/data_feeds_2026.json" = "pipewatch_pro/data_feeds_2026.json"
 
 [tool.hatch.metadata]
 allow-direct-references = true

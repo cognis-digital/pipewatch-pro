@@ -6,3 +6,9 @@ build/
 .pytest_cache/
 *.html
 !demos/**
+
+# port build artifacts
+ports/rust/target/
+ports/rust/Cargo.lock
+ports/go/pipewatch-pro
+node_modules/
