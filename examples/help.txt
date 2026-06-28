@@ -1,0 +1,17 @@
+$ pipewatch-pro-emit --help
+
+usage: pipewatch-pro [-h] [--version] {audit,enrich,feeds} ...
+
+Audit CI/CD pipelines against the OWASP CI/CD Top 10 (passive, offline).
+
+positional arguments:
+  {audit,enrich,feeds}
+    audit               Audit pipeline files / directories.
+    enrich              Match pipeline components against the bundled offline
+                        OSV vulnerability database.
+    feeds               Edge/air-gap data-feed manager (offline cache +
+                        snapshot import/export). See `feeds -h`.
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit

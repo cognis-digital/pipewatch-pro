@@ -21,6 +21,63 @@ pipewatch-pro enrich .         # → match pinned components against 262k offlin
 
 `pipewatch-pro` is a **passive, offline** auditor. It reads your pipeline files and component pins — it never performs network scanning or active probing.
 
+
+<!-- cognis:example:start -->
+## 🔎 Example output
+
+Real, reproducible output from the tool — runs offline:
+
+```console
+$ pipewatch-pro-emit --version
+PIPEWATCH-PRO 0.3.4
+```
+
+```console
+$ pipewatch-pro-emit --help
+usage: pipewatch-pro [-h] [--version] {audit,enrich,feeds} ...
+
+Audit CI/CD pipelines against the OWASP CI/CD Top 10 (passive, offline).
+
+positional arguments:
+  {audit,enrich,feeds}
+    audit               Audit pipeline files / directories.
+    enrich              Match pipeline components against the bundled offline
+                        OSV vulnerability database.
+    feeds               Edge/air-gap data-feed manager (offline cache +
+                        snapshot import/export). See `feeds -h`.
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+```
+
+> Blocks above are real `pipewatch-pro` output — reproduce them from a clone.
+
+**Sample result format** _(illustrative values — run on your own data for real findings):_
+
+```
+{
+"Findings": [
+    {
+        "id": "1234567890",
+        "title": "Suspicious Network Traffic",
+        "description": "Potential malicious activity detected on port 443.",
+        "severity": "medium",
+        "created_at": "2023-02-15T14:30:00Z"
+    },
+    {
+        "id": "2345678901",
+        "title": "Unusual System Login",
+        "description": "Unauthorized access attempt from IP address 192.168.1.100.",
+        "severity": "high",
+        "created_at": "2023-02-15T14:31:00Z"
+    }
+]
+}
+```
+
+<!-- cognis:example:end -->
+
 ## Contents
 
 - [What it actually does](#what) · [Quick start](#quick-start) · [The `audit` command](#audit) · [The `enrich` command](#enrich) · [The `feeds` command](#feeds) · [Output formats](#formats) · [Edge / air-gap](#edge) · [Detectors](#detectors) · [Architecture](#architecture) · [Use from any AI stack](#ai-stack) · [Polyglot ports](#ports) · [Install anywhere](#install-anywhere) · [Scope & safety](#scope) · [Related](#related) · [Contributing](#contributing)

@@ -1,0 +1,3 @@
+$ pipewatch-pro-emit --version
+
+PIPEWATCH-PRO 0.3.4
